@@ -4,16 +4,16 @@ import Image from "next/image";
 import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider  } from "firebase/auth";
 import getFirebase from "../../../functions/getFirebase";
 import {useEffect} from "react";
+import getDb from "../../../functions/getDb";
 
 
 export default function Login() {
     const firebase = getFirebase()
     const auth = getAuth(firebase);
-
+    const db = getDb();
     useEffect(() => {
         getRedirectResult(auth)
             .then((result) => {
-                // This gives you a Google Access Token. You can use it to access Google APIs.
                 if (result) {
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     let token;
@@ -22,15 +22,11 @@ export default function Login() {
                     }
                     const user = result.user;
                     console.log(token, user)
+
+
                 }
             }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
             const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
             console.log(errorMessage)
         });
     }, [])
