@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {getAuth, getRedirectResult, GoogleAuthProvider} from "firebase/auth";
 import getFirebase from "../../../functions/getFirebase";
 import {redirect} from "next/navigation";
-import {bool} from "prop-types";
+import {setCookies} from "@/app/dashboard/setCookies";
 
 let flag = false;
 
@@ -28,6 +28,7 @@ export default function Dashboard() {
                     if (user.email) {
                         localStorage.setItem('email', user.email);
                         setEmail(user.email);
+                        setCookies();
                     }
                     console.log(user)
                 }
@@ -37,7 +38,6 @@ export default function Dashboard() {
         });
 
         if ((localStorage.getItem('redirect') != "true") && (!email) && (!flag)) {
-            console.log('YEA', localStorage.getItem('redirect'));
             redirect('/login');
         }
 
