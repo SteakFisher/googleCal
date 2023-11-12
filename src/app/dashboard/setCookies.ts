@@ -3,5 +3,6 @@
 import { cookies } from 'next/headers'
 
 export async function setCookies() {
-    cookies().set('loggedIn', 'true')
+    cookies().set('loggedIn', 'true');
+
 }

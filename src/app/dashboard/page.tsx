@@ -6,16 +6,16 @@ import {getAuth, getRedirectResult, GoogleAuthProvider} from "firebase/auth";
 import getFirebase from "../../../functions/getFirebase";
 import {redirect} from "next/navigation";
 import {setCookies} from "@/app/dashboard/setCookies";
+import Link from "next/link";
 
 let flag = false;
 
 export default function Dashboard() {
     const firebase = getFirebase()
     const auth = getAuth(firebase)
-    const db = getDb();
 
     let [email, setEmail] = useState(localStorage.getItem('email'));
-    
+
     useEffect(() => {
         getRedirectResult(auth)
             .then((result) => {
@@ -28,6 +28,7 @@ export default function Dashboard() {
                     if (user.email) {
                         localStorage.setItem('email', user.email);
                         setEmail(user.email);
+
                         setCookies();
                     }
                     console.log(user)
@@ -47,4 +48,12 @@ export default function Dashboard() {
 
         localStorage.setItem("redirect", "false")
     }, [])
+
+    const [open, setOpen] = useState(false);
+    const closeModal = () => setOpen(false);
+    return (
+        <Link href={"/event"}>
+            <button>New Calendar event</button>
+        </Link>
+    );
 }
