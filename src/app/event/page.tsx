@@ -1,15 +1,12 @@
 "use client"
 
 import {useEffect} from "react";
+import googleClientFetch from "../../../functions/googleClientFetch";
 
 export default function Event() {
     useEffect( () => {
         const getCalendars = async () => {
-            console.log(await ((await fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList", {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })).json()));
+            console.log(await googleClientFetch("https://www.googleapis.com/calendar/v3/users/me/calendarList"));
         }
         getCalendars();
     }, []);
