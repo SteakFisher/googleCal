@@ -1,13 +1,22 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
-export function middleware(request: NextRequest) {
-    if (request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/dashboard') || (request.nextUrl.pathname.includes("."))) {
-        return NextResponse.next()
+import {createMiddlewareClient} from "@supabase/auth-helpers-nextjs";
+
+export async function middleware(req: NextRequest) {
+    if (req.nextUrl.pathname.includes(".") || req.nextUrl.pathname.startsWith('/auth/callback')) {
+        return NextResponse.next();
     }
-    console.log(cookies().get('loggedIn')?.value)
-    if (cookies().get('loggedIn')?.value != 'true') {
-        return NextResponse.redirect(new URL('/login', request.url));
+
+    const res = NextResponse.next()
+    const supabase = createMiddlewareClient({ req, res });
+
+    const { data: {session}} = await supabase.auth.getSession();
+
+    if(!session && !req.nextUrl.pathname.startsWith('/login')) {
+        return NextResponse.redirect(new URL('/login', req.url));
+    } else if(session && req.nextUrl.pathname.startsWith('/login')) {
+        console.log(session);
+        return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 }
 

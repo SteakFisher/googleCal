@@ -1,22 +1,12 @@
 "use client"
 
 import Image from "next/image";
-import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider  } from "firebase/auth";
-import getFirebase from "../../../functions/getFirebase";
-import {redirect} from "next/navigation";
-import {useEffect} from "react";
-import getAuthProvider from "../../../functions/getAuthProvider";
+import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 
 
 export default function Login() {
-    const firebase = getFirebase()
-    const auth = getAuth(firebase)
-    const provider = getAuthProvider()
+    const supabase = createClientComponentClient();
 
-
-    useEffect(() => {
-        if (localStorage.getItem("redirect") == "true") redirect('/dashboard')
-    }, []);
 
     return (
         <div className={"px-11 py-48 bg-violet-950"}>
@@ -31,9 +21,14 @@ export default function Login() {
        
         <div className={"flex justify-items-end w-96 px- 24 shadow-lm bg-gradient-to-bl from-violet-700 to-indigo-900"}>
         
-        <button className=" px-28 py-20" onClick={(event) => {
-            localStorage.setItem("redirect", "true");
-            signInWithRedirect(auth, provider);
+        <button className=" px-28 py-20" onClick={async (event) => {
+            await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
+                    scopes: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
+                }
+            })
         }}>
             <Image src={'/googleSignIn.svg'} width={181} height={40} alt={"Sign in with google"} />
         </button>
