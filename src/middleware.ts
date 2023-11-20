@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import {createMiddlewareClient} from "@supabase/auth-helpers-nextjs";
 
 export async function middleware(req: NextRequest) {
-    if (req.nextUrl.pathname.includes(".") || req.nextUrl.pathname.startsWith('/auth/callback')) {
+    if (req.nextUrl.pathname.includes(".") || req.nextUrl.pathname.startsWith('/auth/callback') || (req.nextUrl.pathname.startsWith('/subscribe'))) {
         return NextResponse.next();
     }
 
@@ -15,7 +15,6 @@ export async function middleware(req: NextRequest) {
     if(!session && !req.nextUrl.pathname.startsWith('/login')) {
         return NextResponse.redirect(new URL('/login', req.url));
     } else if(session && req.nextUrl.pathname.startsWith('/login')) {
-        console.log(session);
         return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 }

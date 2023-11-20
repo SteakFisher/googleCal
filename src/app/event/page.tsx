@@ -4,6 +4,7 @@ import {ChangeEvent, useState} from "react";
 import cloneStructure from "../../../functions/cloneStructure";
 import { Database } from '../../../types/supabase'
 import {createClient} from "@supabase/supabase-js";
+import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 
 type Key = 'start' | 'end' | 'description' | 'summary'
 
@@ -14,14 +15,17 @@ type Events = {
     summary: string
 }
 
-export default function Event() {
-    const supabase = createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    )
+const supabase = createClientComponentClient<Database>()
 
+export default function Event() {
     const [event, setEvent] = useState({} as Events);
     const [error, setError] = useState("");
+
+    function convert(time: string) {
+        let temp = new Date(time);
+        return temp.toISOString()
+    }
+
     function onElemChange(e: ChangeEvent, key: Key) {
         // @ts-ignore
         event[key] = e.target.value
@@ -34,7 +38,7 @@ export default function Event() {
             <form>
 
                 <label>
-                    TimeZone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
+                    TimeZone: {Intl.DateTimeFormat('en-US').resolvedOptions().timeZone}
                 </label>
                 <br />
 
@@ -78,6 +82,8 @@ export default function Event() {
 
                 <button type={'button'} onClick={ async (e) => {
                     e.preventDefault()
+                    setError("");
+
                     if (!event.summary) {
                         setError("Event title can't be blank")
                     }
@@ -88,10 +94,20 @@ export default function Event() {
                         setError("Event end time should be after the event's start time")
                     }
                     else {
-                        
-                        setError("");
+                        let {data , error } = await supabase
+                            .from('events')
+                            .insert([{
+                                summary: event.summary,
+                                description: event.description,
+                                start_time: convert(event.start),
+                                end_time: convert(event.end)
+                            }])
+                            .select()
+
+                        if (data && data?.length > 0) {
+                            data[0]['id']
+                        }
                     }
-                    console.log(event)
                 }}>Submit</button>
             </form>
         </>
