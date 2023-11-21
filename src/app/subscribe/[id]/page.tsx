@@ -32,7 +32,7 @@ export default async function Subscription({params: {id: id}}: { params: { id: n
                 <h3>{startTime.toLocaleDateString()} {startTime.toLocaleTimeString()}</h3>
                 <h3>{endTime.toLocaleDateString()} {endTime.toLocaleTimeString()}</h3>
 
-                { session ? <SubscribeEvent signedIn={true} id={String(id)}/> : <SubscribeEvent signedIn={false} id={String(id)}/>}
+                { session ? <SubscribeEvent data ={data[0]} signedIn={true} id={String(id)}/> : <SubscribeEvent signedIn={false} id={String(id)}/>}
             </>
 
         )

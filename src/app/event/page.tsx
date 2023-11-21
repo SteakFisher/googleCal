@@ -3,8 +3,8 @@
 import {ChangeEvent, useState} from "react";
 import cloneStructure from "../../../functions/cloneStructure";
 import { Database } from '../../../types/supabase'
-import {createClient} from "@supabase/supabase-js";
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
+import {useRouter} from "next/navigation";
 
 type Key = 'start' | 'end' | 'description' | 'summary'
 
@@ -20,6 +20,7 @@ const supabase = createClientComponentClient<Database>()
 export default function Event() {
     const [event, setEvent] = useState({} as Events);
     const [error, setError] = useState("");
+    const router = useRouter()
 
     function convert(time: string) {
         let temp = new Date(time);
@@ -105,7 +106,8 @@ export default function Event() {
                             .select()
 
                         if (data && data?.length > 0) {
-                            data[0]['id']
+                            console.log(data[0]['id'])
+                            router.push(`/subscribe/${String(data[0].id)}`)
                         }
                     }
                 }}>Submit</button>

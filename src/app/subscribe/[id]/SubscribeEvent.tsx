@@ -3,7 +3,16 @@
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 
-export default function SubscribeEvent({signedIn, id}: {signedIn: boolean, id: string}) {
+type Data =  {
+    author: string,
+    description: string | null,
+    end_time: string | null,
+    id: number,
+    start_time: string | null,
+    summary: string | null
+}
+
+export default function SubscribeEvent({data, signedIn, id}: {data?: Data, signedIn: boolean, id: string}) {
     const supabase = createClientComponentClient();
 
     if (signedIn) {
