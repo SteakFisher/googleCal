@@ -2,6 +2,7 @@
 
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import {cookies} from "next/headers";
 
 type Data =  {
     author: string,
@@ -12,13 +13,16 @@ type Data =  {
     summary: string | null
 }
 
-export default function SubscribeEvent({data, signedIn, id}: {data?: Data, signedIn: boolean, id: string}) {
+export default function SubscribeEvent({data, signedIn, id, primaryCal}: {data?: Data, signedIn: boolean, id: string, primaryCal?: string}) {
     const supabase = createClientComponentClient();
 
     if (signedIn) {
         return (
-            <button onClick={(e) => {
-                console.log("Set it up")
+            <button onClick={async (e) => {
+                e.preventDefault()
+                    // console.log(googleClientFetch())
+                let res = (await (await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary?access_token=${primaryCal}`)).json())
+
             }}>Add to Google Calendar</button>
         )
     }

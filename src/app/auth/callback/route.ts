@@ -1,7 +1,6 @@
 import {createRouteHandlerClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
 import {NextResponse} from "next/server";
-import {id} from "postcss-selector-parser";
 
 export async function GET(req: Request) {
     const reqUrl = new URL(req.url)
@@ -12,7 +11,12 @@ export async function GET(req: Request) {
     if (code) {
         const supabase = createRouteHandlerClient({ cookies });
         try{
-            await supabase.auth.exchangeCodeForSession(code)
+            let {data : {session}} = await supabase.auth.exchangeCodeForSession(code);
+
+            if(session && session.provider_token) {
+                let primCal =  (await (await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary?access_token=${session.provider_token}`)).json())
+                cookies().set('primaryCal', primCal.id);
+            }
         }
         catch (e) {
             console.log(e)

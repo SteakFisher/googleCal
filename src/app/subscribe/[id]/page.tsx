@@ -14,7 +14,6 @@ export default async function Subscription({params: {id: id}}: { params: { id: n
         .from('events')
         .select()
         .eq('id', id);
-    console.log(data)
 
     if(data) {
         let startTime = new Date(data[0].start_time as string);
@@ -32,7 +31,7 @@ export default async function Subscription({params: {id: id}}: { params: { id: n
                 <h3>{startTime.toLocaleDateString()} {startTime.toLocaleTimeString()}</h3>
                 <h3>{endTime.toLocaleDateString()} {endTime.toLocaleTimeString()}</h3>
 
-                { session ? <SubscribeEvent data ={data[0]} signedIn={true} id={String(id)}/> : <SubscribeEvent signedIn={false} id={String(id)}/>}
+                { session ? <SubscribeEvent data ={data[0]} signedIn={true} id={String(id)} primaryCal={cookies().get('primaryCal')?.value}/> : <SubscribeEvent signedIn={false} id={String(id)}/>}
             </>
 
         )
