@@ -23,6 +23,10 @@ export default function Login() {
                         await supabase.auth.signInWithOAuth({
                             provider: 'google',
                             options: {
+                                queryParams: {
+                                    access_type: 'offline',
+                                    prompt: 'consent'
+                                },
                                 redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
                                 scopes: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
                             }

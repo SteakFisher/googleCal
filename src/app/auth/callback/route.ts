@@ -13,9 +13,8 @@ export async function GET(req: Request) {
         try{
             let {data : {session}} = await supabase.auth.exchangeCodeForSession(code);
 
-            if(session && session.provider_token) {
-                let primCal =  (await (await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary?access_token=${session.provider_token}`)).json())
-                cookies().set('primaryCal', primCal.id);
+            if(session && session.provider_refresh_token) {
+                cookies().set('google_refresh_token', session.provider_refresh_token);
             }
         }
         catch (e) {

@@ -4,6 +4,7 @@ import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import {DateTime} from "luxon";
 import {Session} from "@supabase/supabase-js";
+import {redirect} from "next/navigation";
 
 type Data =  {
     author: string,
@@ -47,12 +48,12 @@ export default function SubscribeEvent({data, signedIn, id, session}: {
                         }
                     })
                 })).json())
-                console.log(res)
+                redirect("/dashboard")
             }}>Add to Google Calendar</button>
         )
     } else {
         return (
-            <button className=" px-28 py-20" onClick={async (event) => {
+            <button className=" px-28 py-20" onClick={async () => {
                 await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
