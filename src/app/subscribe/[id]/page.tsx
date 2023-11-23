@@ -26,7 +26,7 @@ export default async function Subscription({params: {id: id}}: { params: { id: n
                 <h3>{DateTime.fromISO(data[0].start_time as string).toLocaleString(DateTime.DATETIME_SHORT)}</h3>
                 <h3>{DateTime.fromISO(data[0].end_time as string).toLocaleString(DateTime.DATETIME_SHORT)}</h3>
 
-                { session ? <SubscribeEvent data ={data[0]} signedIn={true} id={String(id)} primaryCal={cookies().get('primaryCal')?.value}/> : <SubscribeEvent signedIn={false} id={String(id)}/>}
+                { session ? <SubscribeEvent data ={data[0]} signedIn={true} id={String(id)} session={session} /> : <SubscribeEvent signedIn={false} id={String(id)}/>}
             </>
 
         )
