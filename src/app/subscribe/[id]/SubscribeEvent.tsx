@@ -21,7 +21,12 @@ export default function SubscribeEvent({data, signedIn, id, primaryCal}: {data?:
             <button onClick={async (e) => {
                 e.preventDefault()
                     // console.log(googleClientFetch())
-                let res = (await (await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary?access_token=${primaryCal}`)).json())
+                let res = (await (await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
+                    method: "POST",
+                    body: JSON.stringify({
+
+                    })
+                })).json())
 
             }}>Add to Google Calendar</button>
         )

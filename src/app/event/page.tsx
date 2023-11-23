@@ -5,6 +5,7 @@ import cloneStructure from "../../../functions/cloneStructure";
 import { Database } from '../../../types/supabase'
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import {useRouter} from "next/navigation";
+import {DateTime} from "luxon";
 
 type Key = 'start' | 'end' | 'description' | 'summary'
 
@@ -27,8 +28,7 @@ export default function Event() {
         return temp.toISOString()
     }
 
-    function onElemChange(e: ChangeEvent, key: Key) {
-        // @ts-ignore
+    function onElemChange(e: ChangeEvent<HTMLInputElement>, key: Key) {
         event[key] = e.target.value
         setEvent(cloneStructure(event as Events))
     }
@@ -39,7 +39,7 @@ export default function Event() {
             <form>
 
                 <label>
-                    TimeZone: {Intl.DateTimeFormat('en-US').resolvedOptions().timeZone}
+                    Timezone: {DateTime.local().zoneName}
                 </label>
                 <br />
 
@@ -100,8 +100,8 @@ export default function Event() {
                             .insert([{
                                 summary: event.summary,
                                 description: event.description,
-                                start_time: convert(event.start),
-                                end_time: convert(event.end)
+                                start_time: DateTime.fromJSDate(new Date(event.start)).toSQL(),
+                                end_time: DateTime.fromJSDate(new Date(event.end)).toSQL()
                             }])
                             .select()
 
