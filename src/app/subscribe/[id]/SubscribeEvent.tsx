@@ -48,7 +48,6 @@ export default function SubscribeEvent({data, signedIn, id, session}: {
                         }
                     })
                 })).json())
-                redirect("/dashboard")
             }}>Add to Google Calendar</button>
         )
     } else {

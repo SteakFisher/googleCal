@@ -23,8 +23,8 @@ export async function GET(req: Request) {
     }
 
     if (subscribe) {
-        return NextResponse.redirect(new URL(`/subscribe/${subscribe}`, req.url));
+        return NextResponse.redirect(new URL(`/subscribe/${subscribe}`, process.env.NEXT_PUBLIC_VERCEL_URL));
     }
 
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+    return NextResponse.redirect(new URL('/dashboard', process.env.NEXT_PUBLIC_VERCEL_URL));
 }
