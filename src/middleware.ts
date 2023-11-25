@@ -5,7 +5,7 @@ import {cookies} from "next/headers";
 import {BodyInit} from "undici-types";
 
 export async function middleware(req: NextRequest) {
-    if (req.nextUrl.pathname.includes(".") || req.nextUrl.pathname.startsWith('/auth/callback') || (req.nextUrl.pathname.startsWith('/subscribe'))) {
+    if (req.nextUrl.pathname.includes(".") || req.nextUrl.pathname.startsWith('/auth/callback') || (req.nextUrl.pathname.startsWith('/subscribe')) || (req.nextUrl.pathname == "/")) {
         return NextResponse.next();
     }
 

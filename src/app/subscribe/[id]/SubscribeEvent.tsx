@@ -4,7 +4,6 @@ import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import {DateTime} from "luxon";
 import {Session} from "@supabase/supabase-js";
-import {redirect} from "next/navigation";
 
 type Data =  {
     author: string,
@@ -39,7 +38,7 @@ export default function SubscribeEvent({data, signedIn, id, session}: {
                     method: "POST",
                     body: JSON.stringify({
                         'summary': data.summary,
-                        // 'description': data.description ? data.description : null,
+                        'description': data.description ? data.description : null,
                         'start': {
                             'dateTime': `${startSplit[0]}T${startSplit[1]}${startSplit[2]}`,
                         },
